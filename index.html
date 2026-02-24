@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Lonexs Shop — Black Russia, премиальная тема</title>
+    <style>
+        /* ========== НОВАЯ ЦВЕТОВАЯ СХЕМА ========== */
+        :root {
+            --primary: #8b5cf6;           /* фиолетовый */
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --secondary: #3b82f6;          /* синий */
+            --accent: #06b6d4;              /* ледяной голубой */
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --bg-dark: #0f0f13;              /* глубокий темно-серый */
+            --bg-gradient: linear-gradient(145deg, #0f0f13 0%, #1a1a24 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --surface-hover: #1e1e2a;
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.5);
+            --success: #10b981;
+            --ai-color: #4b5563;           /* темно-серый для AI */
+            --ai-glow: rgba(75, 85, 99, 0.3);
+            --reply-color: #8b5cf6;
+            --reaction-color: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== КАСТОМНЫЙ СКРОЛЛБАР ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+            border: 2px solid var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        /* ===== СНЕГОПАД (canvas) ===== */
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* ===== ГИРЛЯНДА ===== */
+        .garland {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            pointer-events: none;
+            z-index: 999;
+            padding: 0 2px;
+            transform: rotate(-0.5deg);
+            will-change: transform;
+        }
+
+        .garland-light {
+            width: 14px;
+            height: 14px;
+            margin: 2px 1px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 12px currentColor, 0 0 6px rgba(255,255,255,0.6);
+            animation: twinkle 1.8s infinite alternate ease-in-out;
+            transform: scale(0.95);
+            will-change: opacity, transform;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.7; transform: scale(0.9); box-shadow: 0 0 8px currentColor; }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 20px currentColor, 0 0 12px white; }
+        }
+
+        @media (max-width: 768px) {
+            .garland-light {
+                width: 12px;
+                height: 12px;
+                animation: twinkle 2s infinite alternate;
+            }
+        }
+
+        /* ===== КОНТЕЙНЕР ===== */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px 15px;
+            width: 100%;
+        }
+
+        /* ===== ШАПКА САЙТА ===== */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 10px 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .logo-avatar-new {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 25px var(--primary-glow);
+            transition: transform 0.2s;
+        }
+
+        .logo-avatar-new:hover {
+            transform: scale(1.08);
+        }
+
+        .site-title {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px var(--primary-glow);
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .control-select {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 9px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .control-select:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== ХЕРО СЕКЦИЯ (уменьшенная аватарка) ===== */
+        .hero-container {
+            text-align: center;
+            margin: 15px auto 30px;
+            animation: float 3s ease-in-out infinite;
+            padding: 0 10px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-avatar {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 24px;
+            object-fit: cover;
+            background: var(--bg-dark);
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 40px var(--primary-glow), 0 10px 30px rgba(0,0,0,0.8);
+            cursor: default;
+            transition: transform 0.3s, box-shadow 0.3s;
+            aspect-ratio: auto;
+        }
+
+        .hero-avatar:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 60px var(--primary-glow), 0 15px 40px black;
+        }
+
+        /* ===== ГЛАВНОЕ МЕНЮ ===== */
+        .main-menu {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px 25px;
+            margin: 30px auto;
+            max-width: 850px;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 0 35px rgba(139, 92, 246, 0.2);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+
+        .menu-btn {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 22px 18px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px var(--primary-glow);
+            color: white;
+            border-color: var(--primary);
+            background: var(--surface-hover);
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== ЭКРАНЫ ===== */
+        .products-screen, .messages-screen, .channel-screen, .reviews-screen, .chat-screen {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0.5; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .active { display: block; }
+
+        .back-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 40px;
+            padding: 14px 30px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px var(--primary-glow);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== ЧАТ ===== */
+        .chat-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid var(--glass-border);
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-message {
+            background: var(--glass);
+            padding: 12px 18px;
+            border-radius: 18px;
+            border: 1px solid var(--glass-border);
+            max-width: 80%;
+            align-self: flex-start;
+            animation: messageAppear 0.3s;
+            transition: all 0.2s;
+        }
+
+        .chat-message.own-message {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            align-self: flex-end;
+            border-color: transparent;
+        }
+
+        .chat-message.ai-message {
+            background: var(--ai-color);
+            align-self: flex-start;
+            border-color: transparent;
+            border-left: 3px solid var(--text-secondary);
+            opacity: 0.9;
+        }
+
+        .chat-message.ai-message .message-author {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-message.ai-message .message-author::before {
+            content: '🤖';
+            font-size: 1.1rem;
+        }
+
+        .chat-message.replying {
+            border: 3px solid var(--reply-color);
+            box-shadow: 0 0 20px var(--reply-color);
+        }
+
+        .reply-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--reply-color);
+        }
+
+        .reply-author {
+            color: var(--reply-color);
+            font-weight: bold;
+        }
+
+        @keyframes messageAppear {
+            from { opacity: 0.5; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .message-author {
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .own-message .message-author {
+            color: white;
+        }
+
+        .message-time {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .message-text {
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .message-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .message-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Реакции */
+        .reactions {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .reaction {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .reaction:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .reaction.active {
+            background: var(--reaction-color);
+            border-color: white;
+        }
+
+        .reaction-count {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .own-message .reaction-count {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .muted-notice {
+            background: var(--danger);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .muted-timer {
+            font-size: 1.2rem;
+            margin-top: 5px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-width: 150px;
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .chat-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 30px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .chat-send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .chat-send-btn:hover::before:not(:disabled) {
+            left: 100%;
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chat-media-btn {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-media-btn:hover:not(:disabled) {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .chat-media-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chat-online {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .chat-online span {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .reply-indicator {
+            background: var(--glass);
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid var(--reply-color);
+        }
+
+        .reply-indicator.active {
+            display: flex;
+        }
+
+        .reply-indicator-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .reply-indicator-cancel {
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 5px;
+        }
+
+        /* Модальное окно для изображений */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 20px;
+            border: 3px solid var(--primary);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: var(--danger);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.1);
+            background: var(--primary);
+        }
+
+        /* ===== ТОВАРЫ ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: var(--glass);
+            border-radius: 28px;
+            padding: 25px 20px 20px;
+            border: 2px solid var(--glass-border);
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 15px 25px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 35px var(--primary-glow), inset 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: var(--accent);
+            color: #0f0f13;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: glow 2s infinite alternate;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 10px var(--accent-glow); }
+            100% { box-shadow: 0 0 25px var(--accent), 0 0 15px var(--accent); }
+        }
+
+        .product-avatar {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 18px;
+            background: var(--bg-dark);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-avatar {
+            transform: scale(1.03);
+        }
+
+        .product-title {
+            font-size: 1.7rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px var(--primary-glow);
+            font-weight: 800;
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            border-left: 5px solid var(--primary);
+            padding-left: 18px;
+            background: rgba(139, 92, 246, 0.07);
+            border-radius: 0 12px 12px 0;
+            white-space: pre-line;
+            flex-grow: 1;
+            font-weight: 500;
+        }
+
+        .product-price {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            text-align: center;
+            margin: 15px 0 20px;
+            padding: 12px;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 20px;
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            backdrop-filter: blur(4px);
+            text-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 40px;
+            padding: 18px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: auto;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 25px var(--primary-glow);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+
+        .buy-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== КОНТАКТЫ, КАНАЛЫ, ОТЗЫВЫ ===== */
+        .contacts-grid, .channel-grid, .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .contact-card, .channel-card, .review-card {
+            background: var(--glass);
+            border-radius: 22px;
+            padding: 25px;
+            border: 2px solid var(--glass-border);
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .contact-card:hover, .channel-card:hover, .review-card:hover {
+            transform: translateY(-6px) rotateX(2deg);
+            border-color: var(--primary);
+            box-shadow: 0 18px 28px var(--primary-glow), inset 0 0 20px rgba(139, 92, 246, 0.1);
+            background: var(--surface-hover);
+        }
+
+        .review-card .review-author {
+            font-weight: 800;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .review-card .review-date {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .screen-title {
+            font-size: 2.3rem;
+            color: var(--primary);
+            text-align: center;
+            margin: 25px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 18px var(--primary-glow);
+            font-weight: 900;
+        }
+
+        .channel-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 22px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 800;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .channel-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        .channel-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== УВЕДОМЛЕНИЯ ===== */
+        .notification {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 30px;
+            border-radius: 50px;
+            display: none;
+            z-index: 1001;
+            animation: slideDown 0.3s;
+            box-shadow: 0 12px 25px var(--primary-glow);
+            font-weight: 800;
+            text-align: center;
+            max-width: 90%;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .all-reviews-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .all-reviews-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .all-reviews-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .all-reviews-btn:hover::before {
+            left: 100%;
+        }
+
+        .reviews-footer {
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .site-header { flex-direction: column; align-items: stretch; }
+            .logo { justify-content: center; }
+            .controls { justify-content: center; }
+            .site-title { font-size: 1.7rem; }
+            .hero-avatar { max-width: 100%; }
+            .product-title { font-size: 1.5rem; }
+            .screen-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ГИРЛЯНДА -->
+    <div class="garland" id="garland"></div>
+    <!-- СНЕГОПАД (canvas) -->
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="container">
+        <!-- ШАПКА САЙТА -->
+        <div class="site-header">
+            <div class="logo">
+                <img src="https://i.postimg.cc/NMbrx2kp/photo-2026-02-08-17-54-09.jpg" alt="Lonexs Shop" class="logo-avatar-new" loading="lazy">
+                <span class="site-title">Lonexs Shop</span>
+            </div>
+            <div class="controls">
+                <select id="languageSelect" class="control-select">
+                    <option value="ru" selected>🇷🇺 Русский</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
+                <select id="currencySelect" class="control-select">
+                    <option value="RUB" selected>₽ RUB</option>
+                    <option value="UAH">₴ UAH</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ХЕРО СЕКЦИЯ: уменьшенная аватарка -->
+        <div class="hero-container">
+            <img src="https://i.postimg.cc/Fs0X0vxf/photo-2026-01-29-19-05-35.jpg" 
+                 alt="Lonexs Shop Hero" 
+                 class="hero-avatar" 
+                 loading="lazy"
+                 onclick="return false;">
+        </div>
+
+        <!-- ГЛАВНОЕ МЕНЮ -->
+        <div class="main-menu" id="mainMenu">
+            <div class="menu-grid">
+                <button class="menu-btn" onclick="showScreen('products')">
+                    <span>🛒</span>
+                    <span data-i18n="products">Товары</span>
+                </button>
+                <button class="menu-btn" onclick="showScreen('messages')">
+                    <span>💬</span>
+                    <span data-i18n="messages">Личные сообщения</span>
+                </button>
+                <button class="menu-btn" onclick="showScreen('channel')">
+                    <span>📺</span>
+                    <span data-i18n="channel">Мои каналы</span>
+                </button>
+                <button class="menu-btn" onclick="showScreen('reviews')">
+                    <span>⭐</span>
+                    <span data-i18n="reviews">Отзывы</span>
+                </button>
+                <button class="menu-btn" onclick="showScreen('chat')" style="grid-column: span 2; background: linear-gradient(135deg, var(--primary), var(--accent));">
+                    <span>💭</span>
+                    <span data-i18n="chat">Общий Чат</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ТОВАРОВ -->
+        <div class="products-screen" id="productsScreen">
+            <button class="back-btn" onclick="showMainMenu()">
+                <span>←</span>
+                <span data-i18n="backToMenu">Назад в меню</span>
+            </button>
+            <h2 class="screen-title" data-i18n="ourProducts">Наши товары</h2>
+            <div class="products-grid">
+                <!-- Black Russia 2023 -->
+                <div class="product-card">
+                    <div class="product-badge" data-i18n="popular">Популярный</div>
+                    <img src="https://i.postimg.cc/NFqfmgWW/photo-2026-01-29-15-57-25.jpg" alt="Black Russia 2023" class="product-avatar" loading="lazy">
+                    <h3 class="product-title" data-i18n="blackRussia2023">Black Russia 2023</h3>
+                    <p class="product-description" data-i18n="blackRussia2023Desc">- Фул автосалон.\n- Донат меню.\n- Кнопки взаимодействия.\n- Кнопки с машиной.\n- Выбор места появления.\n- Метка ЗЗ.\n- На карте 0 дыр.\n- Кеш без авторства</p>
+                    <div class="product-price">
+                        <span class="price-value" data-base-price="300">300</span>
+                        <span class="currency-symbol">₽</span>
+                    </div>
+                    <button class="buy-btn" onclick="buyProduct('Black Russia 2023', 300)">
+                        <span data-i18n="buyNow">Купить сейчас</span>
+                    </button>
+                </div>
+                <!-- Black Russia 2026 -->
+                <div class="product-card">
+                    <div class="product-badge" data-i18n="new">Новинка</div>
+                    <img src="https://i.postimg.cc/NjpMSvH5/photo-2026-01-20-18-33-27.jpg" alt="Black Russia 2026" class="product-avatar" loading="lazy">
+                    <h3 class="product-title" data-i18n="blackRussia2026">Black Russia 2026</h3>
+                    <p class="product-description" data-i18n="blackRussia2026Desc">* 🃏Black Jack\n* 📅Календарь\n* 🔑Регистрация\n* 🛠Крафт\n* 🛡 Зеленые зоны\n* 💎AZ\n* ⛽️АЗС\n* 📦Контейнеры\n* 🏛 Фракции\n* 🎮ПК Клуб\n* 🏡Рублевка\n* 📍GPS\n* 🚘Авторынок\n* 👁Админ Спек\n* 🚀/fly</p>
+                    <div class="product-price">
+                        <span class="price-value" data-base-price="450">450</span>
+                        <span class="currency-symbol">₽</span>
+                    </div>
+                    <button class="buy-btn" onclick="buyProduct('Black Russia 2026', 450)">
+                        <span data-i18n="buyNow">Купить сейчас</span>
+                    </button>
+                </div>
+                <!-- Black Russia Leto 2026 -->
+                <div class="product-card">
+                    <div class="product-badge" data-i18n="summerEdition">Летнее издание</div>
+                    <img src="https://i.postimg.cc/HkxHJcr0/photo-2026-02-15-12-20-36.jpg" alt="Black Russia Leto 2026" class="product-avatar" loading="lazy">
+                    <h3 class="product-title" data-i18n="blackRussiaLeto2026">Black Russia Leto 2026</h3>
+                    <p class="product-description" data-i18n="letoDesc">🌴 Летнее обновление! Уникальные пляжные локации, новые летние квесты, акции и ивенты. Обновленная экономика, кастомные машины и яркая цветовая гамма. Встречай лето в стиле Black Russia!</p>
+                    <div class="product-price">
+                        <span class="price-value" data-base-price="350">350</span>
+                        <span class="currency-symbol">₽</span>
+                    </div>
+                    <button class="buy-btn" onclick="buyProduct('Black Russia Leto 2026', 350)">
+                        <span data-i18n="buyNow">Купить сейчас</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СООБЩЕНИЙ -->
+        <div class="messages-screen" id="messagesScreen">
+            <button class="back-btn" onclick="showMainMenu()">
+                <span>←</span>
+                <span data-i18n="backToMenu">Назад в меню</span>
+            </button>
+            <h2 class="screen-title" data-i18n="personalMessages">Личные сообщения</h2>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <div>✉️</div>
+                    <h3 data-i18n="telegram">Telegram</h3>
+                    <p>@lonexs_support</p>
+                    <a href="https://t.me/lonexs" target="_blank" class="channel-btn" data-i18n="go">Перейти</a>
+                </div>
+                <div class="contact-card">
+                    <div>📧</div>
+                    <h3 data-i18n="email">Email</h3>
+                    <p>support@lonexs-shop.ru</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН КАНАЛОВ -->
+        <div class="channel-screen" id="channelScreen">
+            <button class="back-btn" onclick="showMainMenu()">
+                <span>←</span>
+                <span data-i18n="backToMenu">Назад в меню</span>
+            </button>
+            <h2 class="screen-title" data-i18n="myChannel">Мои каналы</h2>
+            <div class="channel-grid">
+                <div class="channel-card">
+                    <div>📺</div>
+                    <h3 data-i18n="youtubeChannel">YouTube Канал</h3>
+                    <p data-i18n="youtubeDesc">Обзоры и инструкции</p>
+                    <a href="https://www.youtube.com/@Lonexs52" target="_blank" class="channel-btn" data-i18n="go">Перейти</a>
+                </div>
+                <div class="channel-card">
+                    <div>📢</div>
+                    <h3 data-i18n="telegramChannel">Telegram Канал</h3>
+                    <p data-i18n="telegramDesc">Новости и поддержка</p>
+                    <a href="https://t.me/lonexsstudio52" target="_blank" class="channel-btn" data-i18n="subscribe">Подписаться</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ОТЗЫВОВ -->
+        <div class="reviews-screen" id="reviewsScreen">
+            <button class="back-btn" onclick="showMainMenu()">
+                <span>←</span>
+                <span data-i18n="backToMenu">Назад в меню</span>
+            </button>
+            <h2 class="screen-title" data-i18n="customerReviews">Отзывы покупателей</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-author">lildrug</div>
+                    <div class="review-date">25.12.2023</div>
+                    <div data-i18n="review1">Купил Black Russia 2023 - всё работает отлично! Поддержка помогла.</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-author">Zidane</div>
+                    <div class="review-date">15.01.2024</div>
+                    <div data-i18n="review2">Заливка мода за 30 минут. Цена адекватная. Рекомендую!</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-author">Tyler</div>
+                    <div class="review-date">05.02.2024</div>
+                    <div data-i18n="review3">Black Russia 2026 — топ! Обновления регулярно, багов нет.</div>
+                </div>
+            </div>
+            <div class="reviews-footer">
+                <a href="https://t.me/+Lj8kOYgIE9hiZDgy" target="_blank" class="all-reviews-btn" data-i18n="allReviews">📢 Все отзывы</a>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ЧАТА -->
+        <div class="chat-screen" id="chatScreen">
+            <button class="back-btn" onclick="showMainMenu()">
+                <span>←</span>
+                <span data-i18n="backToMenu">Назад в меню</span>
+            </button>
+            <h2 class="screen-title" data-i18n="chat">Общий Чат</h2>
+            <div class="chat-container">
+                <div class="chat-online" id="onlineCount">
+                    👥 <span>1</span> пользователей онлайн
+                </div>
+                <div class="reply-indicator" id="replyIndicator">
+                    <span class="reply-indicator-text" id="replyText">Ответ на сообщение</span>
+                    <span class="reply-indicator-cancel" onclick="cancelReply()">✖</span>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Сообщения будут добавляться сюда -->
+                </div>
+                <div id="mutedNotice" class="muted-notice" style="display: none;">
+                    <span id="mutedMessage"></span>
+                    <div class="muted-timer" id="mutedTimer"></div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Введите имя..." maxlength="30">
+                    <input type="text" id="messageInput" class="chat-input" placeholder="Введите сообщение..." maxlength="1000" disabled>
+                    <button id="sendBtn" class="chat-send-btn" disabled>
+                        <span>📨</span>
+                    </button>
+                    <button id="imageBtn" class="chat-media-btn" disabled title="Отправить изображение">
+                        <span>🖼️</span>
+                    </button>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для просмотра изображений -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeImageModal()">✖</span>
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ========== ПЕРЕВОДЫ (только ru и en) ==========
+        const translations = {
+            ru: {
+                products: "Товары", messages: "Личные сообщения", channel: "Мои каналы", reviews: "Отзывы",
+                ourProducts: "Наши товары", personalMessages: "Личные сообщения", myChannel: "Мои каналы",
+                customerReviews: "Отзывы", blackRussia2023: "Black Russia 2023",
+                blackRussia2023Desc: "- Фул автосалон.\n- Донат меню.\n- Кнопки взаимодействия.\n- Кнопки с машиной.\n- Выбор места появления.\n- Метка ЗЗ.\n- На карте 0 дыр.\n- Кеш без авторства",
+                blackRussia2026: "Black Russia 2026",
+                blackRussia2026Desc: "* 🃏Black Jack\n* 📅Календарь\n* 🔑Регистрация\n* 🛠Крафт\n* 🛡 Зеленые зоны\n* 💎AZ\n* ⛽️АЗС\n* 📦Контейнеры\n* 🏛 Фракции\n* 🎮ПК Клуб\n* 🏡Рублевка\n* 📍GPS\n* 🚘Авторынок\n* 👁Админ Спек\n* 🚀/fly",
+                blackRussiaLeto2026: "Black Russia Leto 2026",
+                letoDesc: "🌴 Летнее обновление! Уникальные пляжные локации, новые летние квесты, акции и ивенты. Обновленная экономика, кастомные машины и яркая цветовая гамма. Встречай лето в стиле Black Russia!",
+                popular: "Популярный", new: "Новинка", summerEdition: "Летнее издание",
+                buyNow: "Купить", backToMenu: "Назад",
+                telegram: "Telegram", email: "Email", youtubeChannel: "YouTube", telegramChannel: "Telegram",
+                youtubeDesc: "Обзоры и инструкции", telegramDesc: "Новости и поддержка", go: "Перейти", subscribe: "Подписаться",
+                allReviews: "📢 Все отзывы", review1: "Купил Black Russia 2023 - всё работает отлично! Поддержка помогла.",
+                review2: "Заливка мода за 30 минут. Цена адекватная. Рекомендую!", review3: "Black Russia 2026 — топ! Обновления регулярно, багов нет.",
+                welcome: "Добро пожаловать в Lonexs Shop!", rub: "₽", uah: "₴",
+                chat: "Общий Чат", enterName: "Введите имя...", enterMessage: "Введите сообщение..."
+            },
+            en: {
+                products: "Products", messages: "Messages", channel: "Channels", reviews: "Reviews",
+                ourProducts: "Our products", personalMessages: "Private messages", myChannel: "My channels",
+                customerReviews: "Reviews", blackRussia2023: "Black Russia 2023",
+                blackRussia2023Desc: "- Full auto showroom.\n- Donation menu.\n- Interaction buttons.\n- Car buttons.\n- Spawn selection.\n- Green zone marker.\n- 0 holes.\n- No authorship",
+                blackRussia2026: "Black Russia 2026",
+                blackRussia2026Desc: "* 🃏Black Jack\n* 📅Calendar\n* 🔑Registration\n* 🛠Craft\n* 🛡 Green zones\n* 💎AZ\n* ⛽️Gas\n* 📦Containers\n* 🏛 Factions\n* 🎮PC Club\n* 🏡Rublyovka\n* 📍GPS\n* 🚘Car market\n* 👁Admin Spec\n* 🚀/fly",
+                blackRussiaLeto2026: "Black Russia Summer 2026",
+                letoDesc: "🌴 Summer edition! Unique beach locations, new summer quests, events. Updated economy, custom cars and bright color scheme. Meet summer in Black Russia style!",
+                popular: "Popular", new: "New", summerEdition: "Summer Edition",
+                buyNow: "Buy", backToMenu: "Back",
+                telegram: "Telegram", email: "Email", youtubeChannel: "YouTube", telegramChannel: "Telegram",
+                youtubeDesc: "Reviews", telegramDesc: "News", go: "Go", subscribe: "Subscribe",
+                allReviews: "📢 All reviews", review1: "Bought Black Russia 2023 - works great! Thanks!", review2: "Mod install 30 min. Fair price.", review3: "Black Russia 2026 is top! Regular updates.",
+                welcome: "Welcome to Lonexs Shop!", rub: "₽", uah: "₴",
+                chat: "Public Chat", enterName: "Enter name...", enterMessage: "Enter message..."
+            }
+        };
+
+        // ========== СОСТОЯНИЕ ==========
+        let currentLang = 'ru';
+        let currentCurrency = 'RUB';
+        const exchangeRate = { RUB: 1, UAH: 0.4 };
+
+        // ========== ЧАТ ==========
+        let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+        let users = JSON.parse(localStorage.getItem('chatUsers')) || [];
+        let currentUser = localStorage.getItem('chatUser') || '';
+        let mutedUntil = localStorage.getItem('mutedUntil') ? parseInt(localStorage.getItem('mutedUntil')) : 0;
+        
+        // Список модераторов (имена с правами)
+        const moderators = ['Админ', 'Модератор']; // Здесь можно добавить имена модераторов
+        
+        let replyingTo = null; // Для ответов на сообщения
+        let clickTimeout = null; // Для определения двойного клика
+        
+        // Ссылка на отзывы
+        const reviewsLink = 'https://t.me/+Lj8kOYgIE9hiZDgy';
+        
+        // Доступные реакции (только положительные)
+        const availableReactions = ['👍', '❤️', '🔥', '😊', '👏', '⭐'];
+
+        // Расширенный список матерных слов
+        const badWords = [
+            // Русские маты
+            'хуй', 'хуя', 'хую', 'хуем', 'хуи', 'хуё', 'хуев', 'хуйня', 'хуйло', 'хуесос',
+            'пизда', 'пизды', 'пизде', 'пизду', 'пиздой', 'пиздец', 'пиздос', 'пиздатый',
+            'блядь', 'бляди', 'блядью', 'блядский', 'блядство', 'бля', 'блять',
+            'ебать', 'ебу', 'ебёт', 'ебут', 'ебал', 'ебала', 'ебало', 'ебаный', 'ебанутый',
+            'сука', 'суки', 'суке', 'суку', 'сучка', 'сучонок',
+            'нахуй', 'нахуя', 'похуй', 'похую', 'похер', 'пофиг', 
+            'залупа', 'залупе', 'залупой', 'залупень',
+            'мудак', 'мудака', 'мудаку', 'мудаком', 'мудацкий',
+            'гандон', 'гандона', 'гандону', 'гандоном',
+            'шлюха', 'шлюхи', 'шлюхе', 'шлюху', 'шлюхой', 'шлюшкин',
+            'пидор', 'пидора', 'пидору', 'пидором', 'пидорас', 'пидорасы',
+            'петух', 'петуха', 'петуху', 'петухом', 'петушиный',
+            'манда', 'манды', 'манде', 'манду', 'мандой', 'мандавошка',
+            'сперма', 'спермой', 'спермотоксикоз',
+            'влагалище', 'вагина', 'пенис', 'член', 'хер', 'хера', 'херня',
+            'дрочить', 'дрочу', 'дрочит', 'дрочил', 'дрочила', 'дрочун',
+            'трахать', 'трахаю', 'трахает', 'трахал', 'трахала',
+            'заебал', 'заебала', 'заебало', 'заебали',
+            'наебнуть', 'наебнулся', 'обоссанный', 'обоссаться',
+            
+            // Английские маты
+            'fuck', 'fucking', 'fucker', 'fucked', 'motherfucker', 'mf',
+            'shit', 'shitting', 'shitter', 'bullshit', 'horseshit',
+            'asshole', 'assholes', 'asshat', 'asswipe',
+            'bitch', 'bitches', 'bitching', 'sonofabitch',
+            'cunt', 'cunts', 'cuntface',
+            'dick', 'dicks', 'dickhead', 'dickface',
+            'pussy', 'pussies', 'pussyhole',
+            'bastard', 'bastards',
+            'whore', 'whores',
+            'slut', 'sluts', 'slutty',
+            'damn', 'goddamn', 'hell',
+            'cock', 'cocks', 'cocksucker',
+            'balls', 'ballsack', 'nutsack',
+            'twat', 'twats',
+            'wanker', 'wankers', 'wanking'
+        ];
+
+        // Функция для проверки неприличных изображений (по расширению и размеру)
+        function checkBadImage(file) {
+            // Проверяем расширение
+            const badExtensions = ['.exe', '.bat', '.cmd', '.sh', '.php', '.js', '.html'];
+            const fileName = file.name.toLowerCase();
+            for (let ext of badExtensions) {
+                if (fileName.endsWith(ext)) {
+                    return true;
+                }
+            }
+            
+            // Проверяем размер (больше 10MB - подозрительно)
+            if (file.size > 10 * 1024 * 1024) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        // Функция для проверки ссылок и упоминаний (для мута реклама)
+        function containsLinksOrMentions(text) {
+            if (!text) return false;
+            // Проверка на ссылки http, https, www
+            const linkPattern = /(https?:\/\/[^\s]+|www\.[^\s]+)/i;
+            // Проверка на упоминания @никнейм
+            const mentionPattern = /@\w+/;
+            return linkPattern.test(text) || mentionPattern.test(text);
+        }
+
+        // Функция для проверки комплиментов в адрес магазина/автора
+        function containsLonexsCompliment(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            // Проверяем наличие фраз "лонекс топ", "лонекс лучший", "лонекс имба"
+            return (lowerText.includes('лонекс топ') || 
+                    lowerText.includes('лонекс лучший') || 
+                    lowerText.includes('лонекс лучши1') ||
+                    lowerText.includes('лонекс имба'));
+        }
+
+        // Проверка, является ли пользователь модератором
+        function isModerator(username) {
+            return moderators.includes(username);
+        }
+
+        // Обработка команд модератора
+        function handleModeratorCommand(text, author) {
+            if (!text.startsWith('мут ') && !text.startsWith('бан ')) return false;
+            
+            const parts = text.split(' ');
+            if (parts.length < 3) return false;
+            
+            const command = parts[0];
+            const targetUser = parts[1];
+            const durationValue = parseInt(parts[2]);
+            
+            if (isNaN(durationValue) || durationValue <= 0) return false;
+            
+            let durationMinutes;
+            let reason;
+            
+            if (command === 'мут') {
+                durationMinutes = durationValue * 60; // часы в минуты
+                reason = 'модератор';
+            } else if (command === 'бан') {
+                durationMinutes = durationValue * 365 * 24 * 60; // годы в минуты
+                reason = 'бан от модератора';
+            } else {
+                return false;
+            }
+            
+            // Применяем наказание к целевому пользователю
+            applyMuteToUser(targetUser, durationMinutes, reason, author);
+            
+            // Сообщение от модератора не добавляется в чат, только системное от AI
+            return true;
+        }
+
+        // Применить мут к конкретному пользователю
+        function applyMuteToUser(username, durationMinutes, reason, moderatorName) {
+            // Сохраняем мут в localStorage для этого пользователя
+            // В реальном приложении здесь должна быть синхронизация между пользователями
+            // В данном примере мы сохраняем мут для текущего пользователя, если имя совпадает
+            if (currentUser === username) {
+                const muteTime = durationMinutes * 60 * 1000;
+                mutedUntil = Date.now() + muteTime;
+                localStorage.setItem('mutedUntil', mutedUntil);
+                
+                // Выкидываем пользователя из чата
+                kickCurrentUser();
+                
+                let durationText = '';
+                if (reason === 'бан от модератора') {
+                    const years = Math.floor(durationMinutes / (365 * 24 * 60));
+                    durationText = `${years} год(а)`;
+                } else {
+                    const hours = Math.floor(durationMinutes / 60);
+                    durationText = `${hours} ч`;
+                }
+                
+                addAIMessage(`🔨 Модератор ${moderatorName} выдал ${reason === 'бан от модератора' ? 'бан' : 'мут'} пользователю ${username} на ${durationText}`);
+                showNotification(`🔨 Вы получили ${reason === 'бан от модератора' ? 'бан' : 'мут'} от модератора на ${durationText}`);
+            } else {
+                // Если это не текущий пользователь, просто уведомляем в чат
+                let durationText = '';
+                if (reason === 'бан от модератора') {
+                    const years = Math.floor(durationMinutes / (365 * 24 * 60));
+                    durationText = `${years} год(а)`;
+                } else {
+                    const hours = Math.floor(durationMinutes / 60);
+                    durationText = `${hours} ч`;
+                }
+                addAIMessage(`🔨 Модератор ${moderatorName} выдал ${reason === 'бан от модератора' ? 'бан' : 'мут'} пользователю ${username} на ${durationText}`);
+            }
+        }
+
+        // Выкинуть текущего пользователя из чата
+        function kickCurrentUser() {
+            // Очищаем имя пользователя
+            currentUser = '';
+            localStorage.removeItem('chatUser');
+            
+            // Сбрасываем поле ввода имени
+            const nameInput = document.getElementById('chatInput');
+            nameInput.value = '';
+            nameInput.disabled = false;
+            
+            // Блокируем отправку сообщений
+            document.getElementById('messageInput').disabled = true;
+            document.getElementById('sendBtn').disabled = true;
+            document.getElementById('imageBtn').disabled = true;
+            
+            // Обновляем отображение мута
+            checkMute();
+        }
+
+        // Функция для обновления таймера мута
+        function updateMuteTimer() {
+            const timerEl = document.getElementById('mutedTimer');
+            const messageEl = document.getElementById('mutedMessage');
+            if (mutedUntil > Date.now()) {
+                document.getElementById('mutedNotice').style.display = 'block';
+                const remaining = Math.floor((mutedUntil - Date.now()) / 1000);
+                const days = Math.floor(remaining / (24 * 3600));
+                const hours = Math.floor((remaining % (24 * 3600)) / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = remaining % 60;
+                
+                if (days > 0) {
+                    messageEl.textContent = `🔇 Вы забанены на ${days} д ${hours} ч`;
+                    timerEl.textContent = `Осталось: ${days}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else if (hours > 0) {
+                    messageEl.textContent = `🔇 Вы получили мут на ${hours} ч ${minutes} мин`;
+                    timerEl.textContent = `Осталось: ${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    messageEl.textContent = `🔇 Вы получили мут на ${minutes} мин`;
+                    timerEl.textContent = `Осталось: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+                return true;
+            } else {
+                if (mutedUntil !== 0) {
+                    localStorage.removeItem('mutedUntil');
+                    mutedUntil = 0;
+                }
+                document.getElementById('mutedNotice').style.display = 'none';
+                if (currentUser) {
+                    document.getElementById('messageInput').disabled = false;
+                    document.getElementById('sendBtn').disabled = false;
+                    document.getElementById('imageBtn').disabled = false;
+                }
+                return false;
+            }
+        }
+
+        function checkMute() {
+            return updateMuteTimer();
+        }
+
+        function containsBadWords(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            return badWords.some(word => lowerText.includes(word));
+        }
+
+        // Проверка на отзывы
+        function checkForReviews(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            return lowerText.includes('отзыв') || lowerText.includes('отзывы');
+        }
+
+        // Проверка на помощь/поддержку
+        function checkForHelp(text) {
+            if (!text) return false;
+            const lowerText = text.toLowerCase();
+            return lowerText.includes('помогите') || lowerText.includes('помощь') || lowerText.includes('поддержка') || lowerText.includes('support') || lowerText.includes('help');
+        }
+
+        function muteUser(userName, reason = 'мат', duration = 30) {
+            // Не наказываем модераторов
+            if (isModerator(userName)) {
+                addAIMessage(`⚠️ Модератор ${userName} не может быть наказан автоматически`);
+                return;
+            }
+            
+            let muteTime = duration * 60 * 1000; // переводим минуты в миллисекунды
+            if (reason === 'bad_image') {
+                muteTime = 24 * 60 * 60 * 1000; // 24 часа за плохое изображение
+            } else if (reason === 'advert') {
+                muteTime = 3 * 60 * 60 * 1000; // 3 часа за рекламу
+            }
+            
+            // Если это текущий пользователь, применяем мут к нему
+            if (currentUser === userName) {
+                mutedUntil = Date.now() + muteTime;
+                localStorage.setItem('mutedUntil', mutedUntil);
+                
+                // Выкидываем пользователя из чата
+                kickCurrentUser();
+            }
+            
+            let durationText = '';
+            if (reason === 'bad_image') {
+                durationText = '24 часа';
+            } else if (reason === 'advert') {
+                durationText = '3 часа';
+            } else {
+                durationText = '30 минут';
+            }
+            
+            let reasonText = reason === 'bad_image' ? 'неприличное изображение' : (reason === 'advert' ? 'рекламу' : 'нецензурную лексику');
+            addAIMessage(`🔇 Пользователь ${userName} получил мут на ${durationText} за ${reasonText}`);
+            
+            if (currentUser === userName) {
+                showNotification(`🔇 Вы получили мут на ${durationText} за нарушение правил чата`);
+            }
+        }
+
+        function addAIMessage(text) {
+            const time = new Date();
+            const message = {
+                author: 'Lonexs Ai',
+                text: text,
+                time: time.toLocaleTimeString(),
+                timestamp: time.getTime(),
+                isAI: true,
+                reactions: {}
+            };
+            
+            messages.push(message);
+            if (messages.length > 100) {
+                messages = messages.slice(-100);
+            }
+            
+            saveMessages();
+            renderMessages();
+        }
+
+        function saveMessages() {
+            localStorage.setItem('chatMessages', JSON.stringify(messages));
+            // Обновляем онлайн счетчик
+            users = [...new Set(messages.map(m => m.author).filter(a => a !== 'Lonexs Ai'))];
+            localStorage.setItem('chatUsers', JSON.stringify(users));
+            document.querySelector('#onlineCount span').textContent = users.length;
+        }
+
+        function addMessage(author, text, type = 'text', mediaUrl = null, replyTo = null) {
+            const time = new Date();
+            const message = {
+                author,
+                text,
+                time: time.toLocaleTimeString(),
+                timestamp: time.getTime(),
+                type,
+                mediaUrl,
+                replyTo: replyTo ? {
+                    author: replyTo.author,
+                    text: replyTo.text,
+                    time: replyTo.time
+                } : null,
+                reactions: {}
+            };
+            
+            messages.push(message);
+            if (messages.length > 100) {
+                messages = messages.slice(-100);
+            }
+            
+            saveMessages();
+            renderMessages();
+        }
+
+        function addReaction(messageIndex, reaction, user) {
+            if (!messages[messageIndex]) return;
+            
+            if (!messages[messageIndex].reactions) {
+                messages[messageIndex].reactions = {};
+            }
+            
+            if (!messages[messageIndex].reactions[reaction]) {
+                messages[messageIndex].reactions[reaction] = [];
+            }
+            
+            // Проверяем, ставил ли пользователь уже эту реакцию
+            const userReactions = messages[messageIndex].reactions[reaction];
+            const userIndex = userReactions.indexOf(user);
+            
+            if (userIndex === -1) {
+                // Добавляем реакцию
+                userReactions.push(user);
+            } else {
+                // Убираем реакцию
+                userReactions.splice(userIndex, 1);
+                if (userReactions.length === 0) {
+                    delete messages[messageIndex].reactions[reaction];
+                }
+            }
+            
+            saveMessages();
+            renderMessages();
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            
+            messages.forEach((msg, index) => {
+                const messageEl = document.createElement('div');
+                messageEl.className = `chat-message ${msg.author === currentUser ? 'own-message' : ''} ${msg.isAI ? 'ai-message' : ''}`;
+                messageEl.setAttribute('data-message-id', index);
+                
+                // Обработка кликов (одинарный/двойной)
+                messageEl.onclick = (e) => {
+                    if (e.target.classList.contains('reaction') || e.target.closest('.reaction')) return;
+                    
+                    if (clickTimeout) {
+                        clearTimeout(clickTimeout);
+                        clickTimeout = null;
+                        // Двойной клик - ответ на сообщение
+                        if (msg.author !== currentUser && !msg.isAI) {
+                            setReplyTo(msg);
+                        }
+                    } else {
+                        clickTimeout = setTimeout(() => {
+                            // Одинарный клик - ничего не делаем
+                            clickTimeout = null;
+                        }, 250);
+                    }
+                };
+                
+                let replyHtml = '';
+                if (msg.replyTo) {
+                    replyHtml = `
+                        <div class="reply-info">
+                            <span class="reply-author">${escapeHtml(msg.replyTo.author)}</span>:
+                            ${escapeHtml(msg.replyTo.text.substring(0, 50))}${msg.replyTo.text.length > 50 ? '...' : ''}
+                        </div>
+                    `;
+                }
+                
+                let content = '';
+                if (msg.type === 'image' && msg.mediaUrl) {
+                    content = `
+                        ${replyHtml}
+                        <div class="message-text">${escapeHtml(msg.text || '')}</div>
+                        <img src="${msg.mediaUrl}" class="message-image" onclick="event.stopPropagation(); showImageModal('${msg.mediaUrl}')">
+                    `;
+                } else {
+                    content = `
+                        ${replyHtml}
+                        <div class="message-text">${escapeHtml(msg.text)}</div>
+                    `;
+                }
+                
+                // Реакции
+                let reactionsHtml = '';
+                if (msg.reactions) {
+                    reactionsHtml = '<div class="reactions">';
+                    for (let reaction in msg.reactions) {
+                        const users = msg.reactions[reaction] || [];
+                        const count = users.length;
+                        const userReacted = users.includes(currentUser);
+                        reactionsHtml += `
+                            <span class="reaction ${userReacted ? 'active' : ''}" onclick="event.stopPropagation(); addReaction(${index}, '${reaction}', '${currentUser}')">
+                                ${reaction} <span class="reaction-count">${count}</span>
+                            </span>
+                        `;
+                    }
+                    reactionsHtml += '</div>';
+                }
+                
+                messageEl.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-author">${escapeHtml(msg.author)}</span>
+                        <span class="message-time">${msg.time}</span>
+                    </div>
+                    ${content}
+                    ${reactionsHtml}
+                `;
+                container.appendChild(messageEl);
+            });
+            
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function setReplyTo(message) {
+            if (message.author === currentUser || message.isAI) return; // Нельзя отвечать на свои сообщения и сообщения AI
+            replyingTo = message;
+            const replyIndicator = document.getElementById('replyIndicator');
+            const replyText = document.getElementById('replyText');
+            replyText.textContent = `Ответ для ${message.author}: ${message.text.substring(0, 50)}${message.text.length > 50 ? '...' : ''}`;
+            replyIndicator.classList.add('active');
+        }
+
+        function cancelReply() {
+            replyingTo = null;
+            document.getElementById('replyIndicator').classList.remove('active');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showImageModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
+        function showNotification(msg) {
+            const n = document.getElementById('notification');
+            n.textContent = msg; n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 2000);
+        }
+
+        function showMainMenu() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.querySelectorAll('.products-screen, .messages-screen, .channel-screen, .reviews-screen, .chat-screen').forEach(s => s.classList.remove('active'));
+        }
+        
+        function showScreen(id) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.querySelectorAll('.products-screen, .messages-screen, .channel-screen, .reviews-screen, .chat-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id + 'Screen').classList.add('active');
+            
+            if (id === 'chat') {
+                renderMessages();
+                checkMute();
+            }
+        }
+
+        function buyProduct(name, basePrice) {
+            let price = currentCurrency === 'UAH' ? Math.round(basePrice * 0.4) : basePrice;
+            let sym = translations[currentLang][currentCurrency.toLowerCase()] || (currentCurrency === 'RUB' ? '₽' : '₴');
+            let now = new Date();
+            let day = String(now.getDate()).padStart(2,'0'), mon = String(now.getMonth()+1).padStart(2,'0'), year = now.getFullYear();
+            let h = String(now.getHours()).padStart(2,'0'), m = String(now.getMinutes()).padStart(2,'0'), s = String(now.getSeconds()).padStart(2,'0');
+            let msg = `🎉 ЗАКАЗ ИЗ Lonexs Shop\n\n🛍 Товары в заказе:\n• ${name} - ${price}${sym} 1шт\n\n💰 Итоговая сумма: ${price} ${sym}\n\nОплачен - нет ❌\n\n🕐 Заказ оформлен: ${day}.${mon}.${year}, ${h}:${m}:${s}`;
+            window.open(`https://t.me/lonexs?text=${encodeURIComponent(msg)}`, '_blank');
+            showNotification(`Заказ на "${name}" отправлен в Telegram`);
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                let key = el.dataset.i18n;
+                if (translations[lang]?.[key]) el.textContent = translations[lang][key];
+            });
+            updatePrices();
+            
+            // Обновляем плейсхолдеры чата
+            document.getElementById('chatInput').placeholder = translations[lang].enterName || 'Введите имя...';
+            document.getElementById('messageInput').placeholder = translations[lang].enterMessage || 'Введите сообщение...';
+        }
+        
+        function changeCurrency(currency) { currentCurrency = currency; updatePrices(); }
+        
+        function updatePrices() {
+            document.querySelectorAll('.price-value').forEach(el => {
+                let base = parseFloat(el.dataset.basePrice);
+                el.textContent = currentCurrency === 'UAH' ? Math.round(base * 0.4) : base;
+            });
+            document.querySelectorAll('.currency-symbol').forEach(el => {
+                el.textContent = translations[currentLang][currentCurrency.toLowerCase()] || (currentCurrency === 'RUB' ? '₽' : '₴');
+            });
+        }
+
+        // ========== ГИРЛЯНДА ==========
+        function createGarland() {
+            const g = document.getElementById('garland');
+            g.innerHTML = '';
+            const colors = ['#ff4d6d', '#ffb347', '#4cc9f0', '#fdfd96', '#ff99c8', '#b8f2e6', '#c77dff', '#ff6b6b', '#70e000', '#00bbf9'];
+            const count = window.innerWidth < 768 ? 32 : 48;
+            for (let i = 0; i < count; i++) {
+                let light = document.createElement('div');
+                light.className = 'garland-light';
+                light.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                light.style.animationDelay = (Math.random() * 2) + 's';
+                light.style.animationDuration = (Math.random() * 1.2 + 1) + 's';
+                g.appendChild(light);
+            }
+        }
+
+        // ========== СНЕГОПАД НА CANVAS ==========
+        const canvas = document.getElementById('snow-canvas');
+        let ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function initSnow() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            
+            const particleCount = Math.min(100, Math.floor(width / 15));
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
+        }
+
+        function drawSnow() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'white';
+            
+            for (let p of particles) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.fill();
+                
+                p.y += p.speed;
+                if (p.y > height) {
+                    p.y = -10;
+                    p.x = Math.random() * width;
+                }
+            }
+            requestAnimationFrame(drawSnow);
+        }
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ЧАТА ==========
+        function initChat() {
+            const nameInput = document.getElementById('chatInput');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const imageBtn = document.getElementById('imageBtn');
+            const imageInput = document.getElementById('imageInput');
+            
+            // Загружаем имя пользователя если было
+            if (currentUser) {
+                nameInput.value = currentUser;
+                nameInput.disabled = true;
+                const muted = checkMute();
+                messageInput.disabled = muted;
+                sendBtn.disabled = muted;
+                imageBtn.disabled = muted;
+            }
+            
+            // Проверяем мут при загрузке
+            checkMute();
+            
+            // Обработчик имени
+            nameInput.addEventListener('change', () => {
+                const name = nameInput.value.trim();
+                if (name && name.length >= 2 && name.length <= 30) {
+                    if (containsBadWords(name)) {
+                        showNotification('❌ Имя содержит недопустимые слова');
+                        nameInput.value = '';
+                        return;
+                    }
+                    
+                    currentUser = name;
+                    localStorage.setItem('chatUser', name);
+                    nameInput.disabled = true;
+                    const muted = checkMute();
+                    messageInput.disabled = muted;
+                    sendBtn.disabled = muted;
+                    imageBtn.disabled = muted;
+                    
+                    // Добавляем сообщение о входе
+                    addAIMessage(`👋 Пользователь ${name} присоединился к чату`);
+                }
+            });
+            
+            // Обработчик отправки текста
+            function sendMessage() {
+                if (!currentUser) {
+                    showNotification('❌ Сначала введите имя');
+                    return;
+                }
+                
+                if (checkMute()) {
+                    showNotification('🔇 Вы не можете писать, так как получили мут');
+                    return;
+                }
+                
+                const text = messageInput.value.trim();
+                if (!text) return;
+                
+                // Проверка на команды модератора (только для модераторов)
+                if (isModerator(currentUser) && (text.startsWith('мут ') || text.startsWith('бан '))) {
+                    if (handleModeratorCommand(text, currentUser)) {
+                        messageInput.value = '';
+                        cancelReply();
+                        return;
+                    }
+                }
+                
+                // Проверка на рекламу (ссылки или упоминания)
+                if (containsLinksOrMentions(text)) {
+                    muteUser(currentUser, 'advert', 3 * 60); // 3 часа в минутах
+                    messageInput.value = '';
+                    cancelReply();
+                    return;
+                }
+                
+                // Проверка на отзывы
+                if (checkForReviews(text)) {
+                    addAIMessage(`Вот наши отзывы, не беспокойтесь: ${reviewsLink}`);
+                }
+                
+                // Проверка на помощь
+                if (checkForHelp(text)) {
+                    addAIMessage(`Вызываем модераторов чата для помощи ${currentUser}`);
+                }
+                
+                // Проверка на мат
+                if (containsBadWords(text)) {
+                    muteUser(currentUser, 'мат', 30);
+                    messageInput.value = '';
+                    cancelReply();
+                    return;
+                }
+                
+                // Добавляем сообщение пользователя
+                addMessage(currentUser, text, 'text', null, replyingTo);
+                
+                // Проверяем, не содержит ли сообщение комплимент в адрес магазина
+                if (containsLonexsCompliment(text)) {
+                    setTimeout(() => {
+                        addAIMessage(`Спасибо, ${currentUser}! Ты тоже крутой! 😊`);
+                    }, 500);
+                }
+                
+                messageInput.value = '';
+                cancelReply();
+            }
+            
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Обработчик отправки изображений
+            imageBtn.addEventListener('click', () => {
+                if (!currentUser || checkMute()) return;
+                imageInput.click();
+            });
+            
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Проверка на плохое изображение
+                    if (checkBadImage(file)) {
+                        muteUser(currentUser, 'bad_image', 24 * 60); // 24 часа в минутах
+                        imageInput.value = '';
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        addMessage(currentUser, '📷 Изображение', 'image', event.target.result, replyingTo);
+                        cancelReply();
+                    };
+                    reader.readAsDataURL(file);
+                }
+                imageInput.value = '';
+            });
+            
+            // Рендерим сообщения
+            renderMessages();
+            
+            // Проверяем мут каждую секунду для обновления таймера
+            setInterval(checkMute, 1000);
+            
+            // Добавляем приветственное сообщение от AI, если чат пустой
+            if (messages.length === 0) {
+                addAIMessage('🤖 Привет! Я Lonexs Ai. Слежу за порядком в чате. За мат даю мут на 30 минут, за рекламу (ссылки или @) - на 3 часа, за плохие изображения - на 24 часа. Модераторы могут использовать команды: мут [имя] [часы], бан [имя] [лет]');
+            }
+        }
+
+        // Делаем функции глобальными для доступа из onclick
+        window.addReaction = addReaction;
+        window.showImageModal = showImageModal;
+        window.closeImageModal = closeImageModal;
+        window.cancelReply = cancelReply;
+
+        window.addEventListener('resize', () => {
+            initSnow();
+            createGarland();
+        });
+
+        // ========== ЗАПУСК ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            createGarland();
+            initSnow();
+            drawSnow();
+            changeLanguage('ru');
+            document.getElementById('languageSelect').addEventListener('change', e => changeLanguage(e.target.value));
+            document.getElementById('currencySelect').addEventListener('change', e => changeCurrency(e.target.value));
+            showNotification(translations[currentLang].welcome);
+            
+            // Инициализируем чат
+            initChat();
+        });
+    </script>
+</body>
+</html>
